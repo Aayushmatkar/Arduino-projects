@@ -1,0 +1,55 @@
+#include <Servo.h>
+#include<LiquidCrystal.h>
+LiquidCrystal lcd(12,11,5,4,3,2);
+               //    RS,EN,D4,D5,D6,D7
+int i=0;
+char inByte;
+int x;
+Servo myservo;
+
+void setup() {
+ lcd.begin(16,2);
+   myservo.attach(10); 
+ pinMode(9,OUTPUT);   //redled
+ pinMode(13,OUTPUT); //green led
+ pinMode(8,OUTPUT); //buzzer
+ digitalWrite(8,LOW);
+Serial.begin(9600);
+}
+
+void loop() {
+  char inByte;
+if(Serial.available()>0);
+{ inByte=Serial.read();
+Serial.println(inByte);
+}
+switch (inByte){
+  case 'A' :myservo.write(180);
+  Serial.println("door unlocked");
+  lcd.clear();
+  lcd.print("DOOR UNLOCKED");
+  Serial.println("DOOR OPENED");
+  digitalWrite(13,HIGH);
+  noTone(8);
+delay(1000);
+digitalWrite(13,LOW);
+  break;
+  case 'a' :myservo.write(0);
+  Serial.println("door locked");
+  lcd.clear();
+    lcd.print("DOOR CLOSED");
+    digitalWrite(9,HIGH);
+    delay(1000);
+    digitalWrite(9,LOW);
+    digitalWrite(8,HIGH);
+    delay(1000); 
+    digitalWrite(8,LOW);
+  break;
+    int x=map(inByte, 0, 1, 0, 180);     
+  myservo.write(x);
+}
+
+delay(1000);
+
+ 
+  }
